@@ -1,0 +1,232 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="best_burgers_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section_title text-center mb-80">
+                        <span>Burger Menu</span>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for burger in burger %}
+                <div class="col-xl-6 col-md-6 col-lg-6">
+                    <div class="single_delicious d-flex align-items-center">
+                        <div class="thumb">
+                            <img class="menu-img" src="{{burger.img.url}}" alt="">
+                        </div>
+                        <div class="info">
+                            <h3>{{burger.name}}</h3>
+                            <p>{{burger.compound}}</p>
+                              <span>{{burger.price}} ₽</span>
+                            <a href="" class="genric-btn primary circle arrow" data-toggle="modal" data-target="#dishesModal{{burger.id}}">В коризну</a>
+
+
+                                                 <!-- Modal -->
+                                    <div class="modal fade" id="dishesModal{{burger.id}}" tabindex="-1" aria-labelledby="dishesModalLabel{{burger.id}}" aria-hidden="true">
+                                      <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h4 class="modal-title" id="dishesModalLabel{{burger.id}}">Желаете добавить дополнительные ингридиенты?</h4>
+                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                            <div class="row">
+                                                <div class="dishesModalImg col-md-6"><img class="imgDishesModal" src="{{burger.img.url}}" alt="" width="200" height="200"></div>
+                                                <div class="dishesModalDesc col-md-6 ml-auto">
+                                                    <h2>{{burger.name}}</h2>
+                                                    <p>{{burger.compound}}</p>
+                                                </div>
+                                            </div>
+                                          <div class="modal-body">
+                                            <ul>
+                                                <div class="liTopping">
+
+
+                                                {% for topping in topping %}
+                                                    <form action=""  method="post" class="add_to_cart">
+                                                             {% csrf_token %}
+                                                    <div class="row">
+                                                        <div class="col-md-4"><div class="toppingNameLeft">{{topping.name}}</div></div>
+                                                        <div class="col-md-4"><div class="toppingPriceLeft"> {{topping.price}} ₽</div></div>
+                                                        <div class="col-md-4">
+                                                            <input type="hidden" value="{{burger.id}}" name="burgerid">
+                                                            <input type="hidden" value="{{topping.id}}" name="topping_id{{topping.id}}">
+                                                            <input type="hidden" value="{{topping.name}}" name="topping_name{{topping.id}}">
+                                                            <input type="hidden" value="{{topping.price}}" name="topping_price{{topping.id}}">
+
+
+
+                                        <div class="quantity_inner">
+                                            <a class="bt_minus">
+                                                <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </a>
+                                            <input type="text" value="0" size="2" class="quantity" data-max-count="20" name="topping_amount{{topping.id}}">
+                                            <a class="bt_plus">
+                                                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </a>
+                                        </div>
+
+
+
+
+
+                                                        </div>
+                                                     </div>
+
+
+                                                        {% endfor %}
+
+                                                </div>
+                                            </ul>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn primary-border circle " data-dismiss="modal">Закрыть</button>
+                                              <form action="{% url 'cart:cart_add_main' dishesfororder.id %}"  method="post" class="add_to_cart">
+                                                    {{ cart_product_form }}
+                                                    {% csrf_token %}
+
+
+                                            <button type="submit" name="add_to_cart" class="genric-btn primary circle arrow" method="POST">Добавить</button>
+
+
+                                          </div>
+                                            </form>
+                                             </form>
+                                        </div>
+                                      </div>
+                                    </div>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+
+                <!-- ExtraMenu -->
+                <div class="col-lg-12">
+                <div class="section_title text-center mb-80">
+                        <span>Kebab & Snacks</span>
+                    </div>
+                    </div>
+
+                <div class="row">
+                    {% for extra in extra %}
+                    <form action="" method="post" name="extra_add">
+                    <div class="col-xl-6 col-md-6 col-lg-6">
+                        <div class="single_delicious d-flex align-items-center">
+                            <div class="thumb">
+                                <img src="{{extra.img.url}}" alt="" width="200" height="200">
+                            </div>
+                            <div class="info">
+                                <h3>{{extra.name}}</h3>
+                                <p>{{extra.description}}</p>
+                                <span>{{extra.price}}</span>
+                                <form action="{% url 'cart:cart_add_main' extra.id %}"  method="post" class="extra_add">
+                                    <input type="hidden" value="{{extra.id}}" name="extra_id">
+
+                                    {{ cart_product_form }}
+                                    {% csrf_token %}
+                                    <button type="submit" name="extra_add" class="genric-btn primary circle arrow" method="post">В коризну</button>
+
+
+
+                                </form>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+                                                          <!-- End Extra -->
+                                                          <!-- Drinks -->
+            <div class="col-lg-12">
+                <div class="section_title text-center mb-80">
+                        <span>Drinks</span>
+                    </div>
+                    </div>
+
+                <div class="row">
+                    {% for drinks in drinks %}
+                    <form action="" method="post" name="drinks_add">
+                    <div class="col-xl-6 col-md-6 col-lg-6">
+                        <div class="single_delicious d-flex align-items-center">
+                            <div class="thumb">
+                                <img src="{{drinks.img.url}}" alt="" width="200" height="200">
+                            </div>
+                            <div class="info">
+                                <h3>{{drinks.name}}</h3>
+                                <p>{{drinks.description}}</p>
+                                <span>{{drinks.price}}</span>
+                                <form action="{% url 'cart:cart_add_main' drinks.id %}"  method="post" class="drinks_add">
+                                    <input type="hidden" value="{{drinks.id}}" name="drinks_id">
+
+                                    {{ cart_product_form }}
+                                    {% csrf_token %}
+                                    <button type="submit" name="drinks_add" class="genric-btn primary circle arrow" method="post">В коризну</button>
+
+
+
+                                </form>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                                                                    <!-- End Drinks -->
+                                                          <!-- Sauces -->
+
+                <div class="col-lg-12">
+                <div class="section_title text-center mb-80">
+                        <span>Sauces</span>
+                    </div>
+                    </div>
+
+                <div class="row">
+                    {% for sauces in sauces %}
+                    <form action="" method="post" name="sauces_add">
+                    <div class="col-xl-6 col-md-6 col-lg-6">
+                        <div class="single_delicious d-flex align-items-center">
+                            <div class="thumb">
+                                <img src="{{sauces.img.url}}" alt="" width="200" height="200">
+                            </div>
+                            <div class="info">
+                                <h3>{{sauces.name}}</h3>
+                                <p>{{sauces.description}}</p>
+                                <span>{{sauces.price}}</span>
+                                <form action="{% url 'cart:cart_add_main' sauces.id %}"  method="post" class="sauces_add">
+                                    <input type="hidden" value="{{sauces.id}}" name="sauces_id">
+
+                                    {{ cart_product_form }}
+                                    {% csrf_token %}
+                                    <button type="submit" name="sauces_add" class="genric-btn primary circle arrow" method="post">В коризну</button>
+
+
+
+                                </form>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

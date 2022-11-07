@@ -1,0 +1,49 @@
+{% extends 'layout/basic.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="best_burgers_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section_title text-center mb-80">
+                        <span>Ваш заказ</span>
+
+                    </div>
+
+
+        <ul>
+            {% for item in cart %}
+                <li>
+                    {{ item.quantity }} x {{ item.product.dishes }}
+                    <span>{{ item.total_price }}  ₽</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <p>Итого: {{ cart.get_total_price }}  ₽.</p>
+
+    <div class="col-6">
+    <form action="." method="post" class="order-form" >
+        {{ form.as_p }}
+        <p><input type="submit" value="Оформить"></p>
+        {% csrf_token %}
+    </form>
+    </div>
+
+
+
+
+
+
+            </div>
+        </div>
+        </div>
+        </div>
+
+
+{% endblock %}
+
+
+
+
+
